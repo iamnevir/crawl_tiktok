@@ -37,7 +37,9 @@ const CrawlMain = () => {
     if (values.url !== "" && values.topic !== "") {
       setLoading(true);
       try {
-        const data = await axios.post("/api/oxylab", values);
+        const data = await axios.post("/api/oxylab", values, {
+          timeout: 10000,
+        });
         setData(JSON.stringify(data.data));
         setLoading(false);
         toast.success("Cào thành công!!!");

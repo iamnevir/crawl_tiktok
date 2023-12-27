@@ -13,18 +13,6 @@ export async function POST(req: Request) {
     await createVideo(data, topic);
     return NextResponse.json(data);
   } catch (error) {
-    const data = {
-      url: "",
-      username: "",
-      nickname: "",
-      createdAt: "",
-      title: "",
-      hashtags: [],
-      musicUrl: "",
-      likes: 0,
-      comments: 0,
-      favorite: 0,
-    };
-    return NextResponse.json(data);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

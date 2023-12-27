@@ -72,19 +72,7 @@ export async function scrapeTiktokVideoOxyLab(url: string) {
 
     return data;
   } catch (error) {
-    const data = {
-      url: "",
-      username: "",
-      nickname: "",
-      createdAt: "",
-      title: "",
-      hashtags: [],
-      musicUrl: "",
-      likes: 0,
-      comments: 0,
-      favorite: 0,
-    };
-    return data;
+    console.log(error);
   }
 }
 async function fetchData(link: string) {
@@ -118,6 +106,6 @@ async function fetchData(link: string) {
     const result = await response.json();
     return result.results[0].content;
   } catch (error) {
-    return error;
+    console.log(error);
   }
 }
