@@ -40,3 +40,15 @@ export async function createVideo(video?: Video, topic?: string) {
     console.log(error);
   }
 }
+export async function getVideo() {
+  try {
+    const videos = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videoCollectionId
+    );
+
+    return videos;
+  } catch (error) {
+    console.log(error);
+  }
+}
