@@ -1,0 +1,140 @@
+"use client";
+import { useState } from "react";
+import JSONPretty from "react-json-pretty";
+import { Button, CircularProgress, Input } from "@nextui-org/react";
+import "react-json-pretty/themes/monikai.css";
+import getTiktokData from "@/actions/getData";
+import toast from "react-hot-toast";
+import * as z from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useFormStatus } from "react-dom";
+import { ID, appwriteConfig, databases } from "@/lib/appwrite/config";
+import { createVideo } from "@/lib/appwrite/api";
+const formSchema = z.object({
+  url: z.string().min(2),
+  topic: z.string().min(2),
+});
+
+const CrawlMain = () => {
+  const [data, setData] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { pending } = useFormStatus();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      url: "",
+      topic: "random",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (values.url !== "" && values.topic !== "") {
+      setLoading(true);
+      try {
+        const data = await getTiktokData(values.url);
+        setData(JSON.stringify(data));
+        setLoading(false);
+        toast.success("Cào thành công!!!");
+        if (data) {
+          await createVideo(data, values.topic);
+          // await databases.createDocument(
+          //   appwriteConfig.databaseId,
+          //   appwriteConfig.videoCollectionId,
+          //   ID.unique(),
+          //   {
+          //     url: data.url,
+          //     username: data.username,
+          //     nickname: data.nickname,
+          //     createdAt: data.createdAt,
+          //     title: data.title,
+          //     hashtags: data.hashtags,
+          //     musicUrl: data.musicUrl,
+          //     likes: data.likes,
+          //     comments: data.comments,
+          //     favorite: data.favorite,
+          //     topic: values.topic,
+          //   }
+          // );
+        }
+      } catch (error) {
+        toast.error("Lỗi rồi!!");
+        setLoading(false);
+      }
+    } else {
+      toast.error("Wtf đã nhập đủ đâu");
+    }
+  }
+  return (
+    <div className="absolute z-[99] gap-2 mt- flex flex-col left-10 justify-center top-20">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-3 w-[30dvw]"
+        >
+          <FormField
+            disabled={pending}
+            control={form.control}
+            name="url"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link video</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="tiktok url"
+                    {...field}
+                    labelPlacement="outside"
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            disabled={pending}
+            control={form.control}
+            name="topic"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Chủ đề của video</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Motivation..."
+                    labelPlacement="outside"
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button size="lg" variant="shadow" color="primary" type="submit">
+            Crawl
+          </Button>
+        </form>
+      </Form>
+
+      {loading ? <CircularProgress aria-label="Loading..." /> : null}
+      {data !== "" && (
+        <div className=" p-5 rounded-xl w-[45dvw] h-[60dvh] overflow-auto bg-gradient-to-tr from-rose-600 to-purple-600 dark:from-default-200 dark:to-slate-400">
+          <span className=" text-center text-3xl w-full flex justify-center p-2 text-white pointer-events-none">
+            Kết quả
+          </span>
+          <JSONPretty id="json-pretty" mainStyle="overflow:auto" data={data} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CrawlMain;
