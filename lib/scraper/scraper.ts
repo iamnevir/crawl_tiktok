@@ -47,30 +47,31 @@ export async function scrapeTiktokVideoOxyLab(url: string) {
   if (!url) return;
   try {
     const res = await fetchData(url);
-    const $ = cheerio.load(res);
-    const username = $('[data-e2e="browse-username"]').text();
-    const nicknameAndDate = $('[data-e2e="browser-nickname"]').text();
-    const desc = $('[data-e2e="browse-video-desc"]').text();
-    const music = $('[data-e2e="browse-music"]').html()?.toString();
-    const likes = $('[data-e2e="like-count"]').text();
-    const comments = $('[data-e2e="comment-count"]').text();
-    const favorite = $('[data-e2e="undefined-count"]').text();
-    const { title, hashtags } = extractTitleAndHashtags(desc);
-    const { nickname, createdAt } = extractUsernameAndDate(nicknameAndDate);
-    const data = {
-      url,
-      username,
-      nickname,
-      createdAt,
-      title,
-      hashtags,
-      musicUrl: extractHrefFromHtml(music!),
-      likes: convertTextToNumber(likes),
-      comments: convertTextToNumber(comments),
-      favorite: convertTextToNumber(favorite),
-    };
+    // const $ = cheerio.load(res);
+    // const username = $('[data-e2e="browse-username"]').text();
+    // const nicknameAndDate = $('[data-e2e="browser-nickname"]').text();
+    // const desc = $('[data-e2e="browse-video-desc"]').text();
+    // const music = $('[data-e2e="browse-music"]').html()?.toString();
+    // const likes = $('[data-e2e="like-count"]').text();
+    // const comments = $('[data-e2e="comment-count"]').text();
+    // const favorite = $('[data-e2e="undefined-count"]').text();
+    // const { title, hashtags } = extractTitleAndHashtags(desc);
+    // const { nickname, createdAt } = extractUsernameAndDate(nicknameAndDate);
+    // const data = {
+    //   url,
+    //   username,
+    //   nickname,
+    //   createdAt,
+    //   title,
+    //   hashtags,
+    //   musicUrl: extractHrefFromHtml(music!),
+    //   likes: convertTextToNumber(likes),
+    //   comments: convertTextToNumber(comments),
+    //   favorite: convertTextToNumber(favorite),
+    // };
 
-    return data;
+    // return data;
+    return res;
   } catch (error) {
     console.log(error);
   }
@@ -106,6 +107,6 @@ async function fetchData(link: string) {
     const result = await response.json();
     return result.results[0].content;
   } catch (error) {
-    console.error("Error:", error);
+    return error;
   }
 }

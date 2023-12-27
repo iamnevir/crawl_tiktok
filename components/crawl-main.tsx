@@ -96,7 +96,7 @@ const CrawlMain = () => {
               </FormItem>
             )}
           />
-          <Button size="lg" variant="shadow" color="primary" type="submit">
+          <Button size="md" variant="shadow" color="primary" type="submit">
             Crawl
           </Button>
         </form>
