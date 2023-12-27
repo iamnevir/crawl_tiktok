@@ -1,4 +1,3 @@
-"use server";
 import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
 import {
@@ -39,6 +38,7 @@ export async function scrapeTiktokVideo(url: string) {
       comments: convertTextToNumber(comments),
       favorite: convertTextToNumber(favorite),
     };
+
     return data;
   } catch (error) {
     console.log(error);

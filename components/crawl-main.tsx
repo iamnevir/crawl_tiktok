@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
+import axios from "axios";
 import JSONPretty from "react-json-pretty";
 import { Button, CircularProgress, Input } from "@nextui-org/react";
 import "react-json-pretty/themes/monikai.css";
-import getTiktokData from "@/actions/getData";
 import toast from "react-hot-toast";
 import * as z from "zod";
 import {
@@ -16,9 +16,7 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useFormStatus } from "react-dom";
-import { ID, appwriteConfig, databases } from "@/lib/appwrite/config";
-import { createVideo } from "@/lib/appwrite/api";
+import { cn } from "@/lib/utils";
 const formSchema = z.object({
   url: z.string().min(2),
   topic: z.string().min(2),
@@ -27,7 +25,6 @@ const formSchema = z.object({
 const CrawlMain = () => {
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(false);
-  const { pending } = useFormStatus();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,31 +37,11 @@ const CrawlMain = () => {
     if (values.url !== "" && values.topic !== "") {
       setLoading(true);
       try {
-        const data = await getTiktokData(values.url);
-        setData(JSON.stringify(data));
+        const data = await axios.post("/api/video", values);
+        setData(JSON.stringify(data.data));
         setLoading(false);
         toast.success("Cào thành công!!!");
-        if (data) {
-          await createVideo(data, values.topic);
-          // await databases.createDocument(
-          //   appwriteConfig.databaseId,
-          //   appwriteConfig.videoCollectionId,
-          //   ID.unique(),
-          //   {
-          //     url: data.url,
-          //     username: data.username,
-          //     nickname: data.nickname,
-          //     createdAt: data.createdAt,
-          //     title: data.title,
-          //     hashtags: data.hashtags,
-          //     musicUrl: data.musicUrl,
-          //     likes: data.likes,
-          //     comments: data.comments,
-          //     favorite: data.favorite,
-          //     topic: values.topic,
-          //   }
-          // );
-        }
+        form.reset();
       } catch (error) {
         toast.error("Lỗi rồi!!");
         setLoading(false);
@@ -78,10 +55,12 @@ const CrawlMain = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-3 w-[30dvw]"
+          className={cn(
+            "space-y-3 w-[30dvw]",
+            loading ? "opacity-50 pointer-events-none" : ""
+          )}
         >
           <FormField
-            disabled={pending}
             control={form.control}
             name="url"
             render={({ field }) => (
@@ -100,7 +79,6 @@ const CrawlMain = () => {
             )}
           />
           <FormField
-            disabled={pending}
             control={form.control}
             name="topic"
             render={({ field }) => (
