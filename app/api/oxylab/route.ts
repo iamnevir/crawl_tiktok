@@ -13,7 +13,6 @@ export async function POST(req: Request) {
     await createVideo(data, topic);
     return NextResponse.json(data);
   } catch (error) {
-    console.log(error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
