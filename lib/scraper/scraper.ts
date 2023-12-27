@@ -98,6 +98,7 @@ async function fetchData(link: string) {
         "base64"
       )}`,
     },
+
     body: JSON.stringify(data),
   };
 

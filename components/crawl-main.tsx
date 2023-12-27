@@ -45,6 +45,7 @@ const CrawlMain = () => {
         toast.success("Cào thành công!!!");
         form.reset();
       } catch (error) {
+        console.log(error);
         toast.error("Lỗi rồi!!");
         setLoading(false);
       }
