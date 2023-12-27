@@ -38,7 +38,7 @@ const CrawlMain = () => {
       setLoading(true);
       try {
         const data = await axios.post("/api/oxylab", values, {
-          timeout: 10000,
+          timeout: 60000,
         });
         setData(JSON.stringify(data.data));
         setLoading(false);
