@@ -43,7 +43,7 @@ export function formatVietnameseDate(timespanInMilliseconds: number): string {
     "Tháng 12",
   ];
 
-  const date = new Date(timespanInMilliseconds);
+  const date = new Date(timespanInMilliseconds * 1000);
 
   const day = date.getDate();
   const month = date.getMonth();

@@ -69,7 +69,7 @@ export async function getVideo() {
     const videos = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.videoCollectionId,
-      [Query.orderDesc("$updatedAt"), Query.limit(10)]
+      [Query.orderDesc("$updatedAt"), Query.limit(100)]
     );
 
     return videos;
