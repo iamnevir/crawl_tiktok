@@ -28,7 +28,7 @@ export type Video = {
   forFriend: boolean;
   view: number;
   likes: number;
-  share: number;
+  shares: number;
   comments: number;
   favorite: number;
   suggestedWords: string;
@@ -61,7 +61,7 @@ const VideoTable = ({ data }: { data: Video[] }) => {
     []
   );
   const maxShare = useMemo(
-    () => data.reduce((acc, curr) => Math.max(acc, curr.share), 0),
+    () => data.reduce((acc, curr) => Math.max(acc, curr.shares), 0),
     []
   );
   const maxComment = useMemo(
@@ -138,8 +138,8 @@ const VideoTable = ({ data }: { data: Video[] }) => {
         </Stack>
       ),
     }),
-    columnHelper.accessor("share", {
-      header: "share",
+    columnHelper.accessor("shares", {
+      header: "shares",
       size: 50,
       aggregationFn: "max", //show the max age in the group (lots of pre-built aggregationFns to choose from)
       //required to render an aggregated cell

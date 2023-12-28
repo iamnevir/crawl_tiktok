@@ -21,7 +21,7 @@ const DatabasePage = async () => {
     forFriend: item.forFriend,
     view: item.view,
     likes: item.likes,
-    share: item.share,
+    shares: item.shares,
     comments: item.comments,
     favorite: item.favorite,
     suggestedWords: item.suggestedWords,
