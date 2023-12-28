@@ -1,5 +1,5 @@
 import { createVideo, getVideo } from "@/lib/appwrite/api";
-import { scrapeTiktokVideo } from "@/lib/scraper/scraper";
+import { scrapeTiktok } from "@/lib/scraper/scraper";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     if (!url && !topic) {
       return new NextResponse("wtf", { status: 401 });
     }
-    const data = await scrapeTiktokVideo(url);
+    const data = await scrapeTiktok(url);
     await createVideo(data, topic);
     return NextResponse.json(data);
   } catch (error) {
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
 export async function GET(req: Request) {
   try {
     const data = await getVideo();

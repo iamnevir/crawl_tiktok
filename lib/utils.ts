@@ -1,38 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import * as cheerio from "cheerio";
-import { format, parse, addDays, addHours } from "date-fns";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-export function extractHrefFromHtml(html: string): string | null {
-  // Load HTML string into Cheerio
-  const $ = cheerio.load(html);
 
-  // Find the 'a' tag and get the 'href' attribute
-  const href = $("a").attr("href");
-
-  return `https://www.tiktok.com/${href}` || null;
-}
-export function convertTextToNumber(text: string): number {
-  const multiplierMap: { [key: string]: number } = {
-    K: 1e3,
-    M: 1e6,
-  };
-
-  const match = text.match(/^(\d*\.?\d+)([KM])?$/);
-
-  if (!match) {
-    throw new Error(`Invalid input: ${text}`);
-  }
-
-  const value = parseFloat(match[1]);
-  const multiplier = match[2] ? multiplierMap[match[2]] : 1;
-
-  // Làm tròn số nguyên
-
-  return value * multiplier;
-}
 export function extractTitleAndHashtags(text: string): {
   title: string;
   hashtags: string[];
@@ -56,43 +27,29 @@ export function extractTitleAndHashtags(text: string): {
 
   return { title, hashtags };
 }
+export function formatVietnameseDate(timespanInMilliseconds: number): string {
+  const months: string[] = [
+    "Tháng 1",
+    "Tháng 2",
+    "Tháng 3",
+    "Tháng 4",
+    "Tháng 5",
+    "Tháng 6",
+    "Tháng 7",
+    "Tháng 8",
+    "Tháng 9",
+    "Tháng 10",
+    "Tháng 11",
+    "Tháng 12",
+  ];
 
-export function extractUsernameAndDate(text: string): {
-  nickname: string;
-  createdAt: string;
-} {
-  const [username, dateString] = text.split(" · ");
-  const dayAgo = dateString.match(/(\d+)d ago/);
-  const hourAgo = dateString.match(/(\d+)h ago/);
-  const noYear = dateString.match(/^\d{1,2}-\d{1,2}$/);
+  const date = new Date(timespanInMilliseconds);
 
-  if (dayAgo) {
-    const daysAgo = parseInt(dayAgo[1], 10);
-    const currentDate = new Date();
-    const date = addDays(currentDate, -daysAgo);
-    const formatDate = format(date, "dd/MM/yyyy");
-    return { nickname: username.trim(), createdAt: formatDate };
-  }
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
 
-  if (hourAgo) {
-    const hoursAgo = parseInt(hourAgo[1], 10);
-    const currentDate = new Date();
-    const date = addHours(currentDate, -hoursAgo);
-    const formatDate = format(date, "dd/MM/yyyy");
-    return { nickname: username.trim(), createdAt: formatDate };
-  }
+  const formattedDate = ` ${day}, ${months[month]}, ${year}`;
 
-  if (noYear) {
-    const [day, month] = dateString.split("-").map(Number);
-    const currentYear = new Date().getFullYear();
-    const targetYear = 2024; // Năm cần đặt
-    const date = new Date(targetYear, month - 1, day);
-    const formatDate = format(date, "dd/MM/yyyy");
-    return { nickname: username.trim(), createdAt: formatDate };
-  }
-
-  // Chuyển đổi chuỗi ngày thành đối tượng Date
-  const date = parse(dateString, "yyyy-M-d", new Date());
-  const formatDate = format(date, "dd/MM/yyyy");
-  return { nickname: username.trim(), createdAt: formatDate };
+  return formattedDate;
 }

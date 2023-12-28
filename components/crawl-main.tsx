@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import JSONPretty from "react-json-pretty";
 import { Button, CircularProgress, Input } from "@nextui-org/react";
 import "react-json-pretty/themes/monikai.css";
@@ -37,10 +37,8 @@ const CrawlMain = () => {
     if (values.url !== "" && values.topic !== "") {
       setLoading(true);
       try {
-        const data = await axios.post("/api/oxylab", values, {
-          timeout: 60000,
-        });
-        setData(JSON.stringify(data.data));
+        const data = await axios.post("/api/video", values);
+        setData(data.data);
         setLoading(false);
         toast.success("Cào thành công!!!");
         form.reset();

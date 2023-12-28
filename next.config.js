@@ -1,10 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  api: {
-    bodyParser: false,
-  },
-
-  maxDuration: 60,
-};
+const nextConfig = {};
 
 module.exports = nextConfig;
