@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import JSONPretty from "react-json-pretty";
 import { Button, CircularProgress, Input } from "@nextui-org/react";
 import "react-json-pretty/themes/monikai.css";
@@ -29,7 +29,7 @@ const CrawlMain = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       url: "",
-      topic: "random",
+      topic: "motivation",
     },
   });
 
@@ -52,12 +52,12 @@ const CrawlMain = () => {
     }
   }
   return (
-    <div className="absolute z-[99] gap-2 mt- flex flex-col left-10 justify-center top-20">
+    <div className="absolute z-[99] gap-2 flex flex-col left-10 justify-center top-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={cn(
-            "space-y-3 w-[30dvw]",
+            "space-y-3 lg:w-[30dvw] w-[80dvw]",
             loading ? "opacity-50 pointer-events-none" : ""
           )}
         >
@@ -105,7 +105,7 @@ const CrawlMain = () => {
 
       {loading ? <CircularProgress aria-label="Loading..." /> : null}
       {data !== "" && (
-        <div className=" p-5 rounded-xl w-[45dvw] h-[60dvh] overflow-auto bg-gradient-to-tr from-rose-600 to-purple-600 dark:from-default-200 dark:to-slate-400">
+        <div className=" p-5 rounded-xl lg:w-[45dvw] lg:h-[60dvh] w-[80dvw] h-[60dvh] overflow-auto bg-gradient-to-tr from-rose-600 to-purple-600 dark:from-default-200 dark:to-slate-400">
           <span className=" text-center text-3xl w-full flex justify-center p-2 text-white pointer-events-none">
             Kết quả
           </span>
