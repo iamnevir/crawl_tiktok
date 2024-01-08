@@ -56,7 +56,7 @@ const Hastags = ({ data }: { data: any[] }) => {
           </TableHeader>
           <TableBody loadingContent={<Spinner label="Loading..." />}>
             {data.map((item, index) => (
-              <TableRow>
+              <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.hashtag}</TableCell>
                 <TableCell>{item.totalVideos}</TableCell>
