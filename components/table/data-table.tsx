@@ -10,7 +10,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import { useMemo } from "react";
 import { formatVietnameseDate } from "@/lib/utils";
-export type Video = {
+export type DatabaseVideo = {
   url: string;
   username: string;
   nickname: string;
@@ -33,7 +33,7 @@ export type Video = {
   favorite: number;
   suggestedWords: string;
 };
-const columnHelper = createMRTColumnHelper<Video>();
+const columnHelper = createMRTColumnHelper<DatabaseVideo>();
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -41,8 +41,8 @@ const csvConfig = mkConfig({
   useKeysAsHeaders: true,
 });
 
-const VideoTable = ({ data }: { data: Video[] }) => {
-  const handleExportRows = (rows: MRT_Row<Video>[]) => {
+const VideoTable = ({ data }: { data: DatabaseVideo[] }) => {
+  const handleExportRows = (rows: MRT_Row<DatabaseVideo>[]) => {
     const rowData = rows.map((row) => row.original);
     const csv = generateCsv(csvConfig)(rowData);
     download(csvConfig)(csv);

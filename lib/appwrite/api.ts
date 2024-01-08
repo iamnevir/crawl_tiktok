@@ -1,6 +1,7 @@
 "use server";
 import { Query } from "appwrite";
 import { ID, appwriteConfig, databases } from "./config";
+import { DatabaseVideo } from "@/components/table/data-table";
 
 type Video = {
   url: string;
@@ -69,10 +70,32 @@ export async function getVideo() {
     const videos = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.videoCollectionId,
-      [Query.orderDesc("$updatedAt"), Query.limit(100)]
+      [Query.orderDesc("$updatedAt"), Query.limit(5000)]
     );
-
-    return videos;
+    const data = videos?.documents.map((item) => ({
+      url: item.url,
+      username: item.username,
+      nickname: item.nickname,
+      bio: item.bio,
+      createdAt: item.createdAt,
+      cover: item.cover,
+      dynamicCover: item.dynamicCover,
+      title: item.title,
+      hashtags: item.hashtags,
+      musicAuthorName: item.musicAuthorName,
+      musicTitle: item.musicTitle,
+      musicDuration: item.musicDuration,
+      musicOriginal: item.musicOriginal,
+      musicPlayUrl: item.musicPlayUrl,
+      forFriend: item.forFriend,
+      view: item.view,
+      likes: item.likes,
+      shares: item.shares,
+      comments: item.comments,
+      favorite: item.favorite,
+      suggestedWords: item.suggestedWords,
+    }));
+    return data;
   } catch (error) {
     console.log(error);
   }
