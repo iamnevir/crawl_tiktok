@@ -42,7 +42,6 @@ const Trending = () => {
       sethastags(ht);
       setvideo(vd);
       setloading(false);
-      console.log(videos.data);
     };
     fetchApi();
   }, []);
