@@ -191,3 +191,19 @@ export const getTop3UsersByView = (
       videos.reduce((sum, video) => sum + video.view, 0),
     ]);
 };
+//hấtg
+export function getAllUniqueHashtags(videos: DatabaseVideo[]): string[] {
+  const uniqueHashtags: Set<string> = new Set();
+  const addedHashtags: Set<string> = new Set();
+
+  videos.forEach((video) => {
+    video.hashtags.forEach((hashtag) => {
+      if (!addedHashtags.has(hashtag)) {
+        uniqueHashtags.add(hashtag);
+        addedHashtags.add(hashtag);
+      }
+    });
+  });
+
+  return Array.from(uniqueHashtags);
+}

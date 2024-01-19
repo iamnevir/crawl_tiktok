@@ -3,11 +3,7 @@ import { getVideo } from "@/lib/appwrite/api";
 const DatabasePage = async () => {
   const json = await getVideo();
 
-  return (
-    <div>
-      <VideoTable data={json!} />
-    </div>
-  );
+  return <div>{/* <VideoTable data={json!} /> */}</div>;
 };
 
 export default DatabasePage;

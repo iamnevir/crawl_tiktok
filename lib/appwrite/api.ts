@@ -2,6 +2,7 @@
 import { Query } from "appwrite";
 import { ID, appwriteConfig, databases } from "./config";
 import { DatabaseVideo } from "@/components/table/data-table";
+import { evaluate } from "../evaluate";
 
 type Video = {
   url: string;
@@ -94,7 +95,9 @@ export async function getVideo() {
       comments: item.comments,
       favorite: item.favorite,
       suggestedWords: item.suggestedWords,
+      value: evaluate(item.hashtags),
     }));
+
     return data;
   } catch (error) {
     console.log(error);

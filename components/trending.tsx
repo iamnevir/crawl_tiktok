@@ -1,6 +1,7 @@
 "use client";
 import {
   cn,
+  getAllUniqueHashtags,
   getTop3UsersByView,
   getTopHashtagsByViews,
   getTopMusicPlayUrl,
@@ -13,6 +14,7 @@ import Musics from "./musics";
 import Videos from "./videos";
 import Creator from "./creator";
 import axios from "axios";
+import { evaluate } from "@/lib/evaluate";
 
 const Trending = () => {
   const [selected, setSelected] = useState<any>("hastags");
@@ -28,13 +30,19 @@ const Trending = () => {
       const ms = getTopMusicPlayUrl(videos.data);
       const ht = getTopHashtagsByViews(videos.data, 3);
       const vd = videos.data
-        .sort((a: any, b: any) => b.view - a.view)
+        .sort((a: any, b: any) => {
+          if (a.value !== b.value) {
+            return b.value - a.value;
+          }
+          return b.view - a.view;
+        })
         .slice(0, 4);
       setcreator(cr);
       setmusic(ms);
       sethastags(ht);
       setvideo(vd);
       setloading(false);
+      console.log(videos.data);
     };
     fetchApi();
   }, []);
