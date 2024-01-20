@@ -95,7 +95,7 @@ export async function getVideo() {
       comments: item.comments,
       favorite: item.favorite,
       suggestedWords: item.suggestedWords,
-      value: evaluate(item.hashtags),
+      value: evaluate(item.hashtags, item.view, item.likes),
     }));
 
     return data;

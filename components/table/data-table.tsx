@@ -32,7 +32,7 @@ export type DatabaseVideo = {
   comments: number;
   favorite: number;
   suggestedWords: string;
-  value: number;
+  value?: number;
 };
 const columnHelper = createMRTColumnHelper<DatabaseVideo>();
 

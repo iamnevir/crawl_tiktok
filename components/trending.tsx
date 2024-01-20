@@ -1,7 +1,6 @@
 "use client";
 import {
   cn,
-  getAllUniqueHashtags,
   getTop3UsersByView,
   getTopHashtagsByViews,
   getTopMusicPlayUrl,
@@ -14,7 +13,6 @@ import Musics from "./musics";
 import Videos from "./videos";
 import Creator from "./creator";
 import axios from "axios";
-import { evaluate } from "@/lib/evaluate";
 
 const Trending = () => {
   const [selected, setSelected] = useState<any>("hastags");
@@ -25,18 +23,20 @@ const Trending = () => {
   const [loading, setloading] = useState(true);
   useEffect(() => {
     const fetchApi = async () => {
+      // const hehe = await axios.get("/api/value");
+      // console.log(hehe.data);
       const videos = await axios.get("/api/video");
       const cr = getTop3UsersByView(videos.data);
       const ms = getTopMusicPlayUrl(videos.data);
       const ht = getTopHashtagsByViews(videos.data, 3);
       const vd = videos.data
-        .sort((a: any, b: any) => {
-          if (a.value !== b.value) {
-            return b.value - a.value;
-          }
-          return b.view - a.view;
+        .sort((a: any, b: any) => b.value - a.value) // Sắp xếp giảm dần theo value
+        .filter((value: any, index: any, self: any) => {
+          // Lọc các video có url khác nhau
+          return index === self.findIndex((v: any) => v.url === value.url);
         })
         .slice(0, 4);
+      console.log(vd);
       setcreator(cr);
       setmusic(ms);
       sethastags(ht);

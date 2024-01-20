@@ -1,10 +1,24 @@
 import { evaluate } from "@/lib/evaluate";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   try {
-    const hashtags = await req.json();
-    const data = evaluate(hashtags);
+    const data = evaluate(
+      [
+        "#motivation",
+        "#motivationspeech",
+        "#motivational",
+        "#mindsetquotes",
+        "#motivationalquotes",
+        "#motivationalvideo",
+        "#lifetips",
+        "#mindset",
+        "#hustlehard",
+        "#inspiration",
+      ],
+      1000000,
+      800000
+    );
     return NextResponse.json(data);
   } catch (error) {
     console.log(error);
